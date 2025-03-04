@@ -38,8 +38,7 @@ const Index = () => {
   };
 
   const deleteTodo = (id: number, e: React.MouseEvent) => {
-    // Stop propagation to prevent toggling when delete button is clicked
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent the card click from triggering
     setTodos(todos.filter(todo => todo.id !== id));
   };
 
@@ -74,20 +73,22 @@ const Index = () => {
               todos.map((todo) => (
                 <div
                   key={todo.id}
-                  className={`flex items-center justify-between p-3 rounded-md border cursor-pointer transition-colors ${
-                    todo.completed 
-                      ? "bg-gray-50 border-gray-200" 
-                      : "bg-white border-gray-300 hover:bg-gray-50"
-                  }`}
                   onClick={() => toggleTodo(todo.id)}
+                  className={`
+                    flex items-center justify-between p-3 rounded-md border
+                    ${todo.completed ? "bg-gray-50" : "bg-white"}
+                    hover:bg-gray-100 cursor-pointer transition-all
+                  `}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Mark "${todo.text}" as ${todo.completed ? "incomplete" : "complete"}`}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 flex-1">
                     <Checkbox
                       checked={todo.completed}
                       onCheckedChange={() => toggleTodo(todo.id)}
-                      id={`todo-${todo.id}`}
-                      // Prevent double toggling when checkbox is clicked directly
                       onClick={(e) => e.stopPropagation()}
+                      id={`todo-${todo.id}`}
                     />
                     <span
                       className={`text-sm ${
@@ -102,6 +103,7 @@ const Index = () => {
                     size="icon"
                     onClick={(e) => deleteTodo(todo.id, e)}
                     className="h-8 w-8 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    aria-label={`Delete "${todo.text}"`}
                   >
                     <Trash2 className="h-4 w-4" />
                   </Button>
